@@ -15,27 +15,47 @@ public interface NamedFunctionType {
     //TODO: registry
     static NamedFunctionType getType(int startPos, String name) {
         for (SingleFunctions func : SingleFunctions.values()) {
-            if(func.name.equals(name)) {
+            if(func.name().equalsIgnoreCase(name)) {
                 return func;
             }
         }
         for (DoubleFunctions func : DoubleFunctions.values()) {
-            if(func.name.equals(name)) {
+            if(func.name().equalsIgnoreCase(name)) {
                 return func;
             }
         }
         throw new MathParseException(startPos, "Unknown function " + name);
     }
 
+    @SuppressWarnings("unused")
     enum SingleFunctions implements NamedFunctionType {
-        RADIANS("toRadians", Math::toRadians),
-        SIN("sin", Math::sin);
+        SQRT(Math::sqrt),
+        CBRT(Math::cbrt),
+        FLOOR(Math::floor),
+        CEIL(Math::ceil),
+        ROUND(in -> (double)Math.round( in)),
+        ABS(Math::abs),
+        LOG(Math::log),
+        LOG10(Math::log10),
+        LOG1P(Math::log1p),
+        EXP(Math::exp),
+        EXPM1(Math::expm1),
+        EXPONANT(in ->(double)Math.getExponent(in)),
+        DEGREES(Math::toDegrees),
+        RADIANS(Math::toRadians),
+        SIN(Math::sin),
+        ASIN(Math::asin),
+        SINH(Math::sinh),
+        COS(Math::cos),
+        ACOS(Math::acos),
+        COSH(Math::cosh),
+        TAN(Math::atan),
+        ATAN(Math::atan),
+        TANH(Math::tanh);
 
-        private final String name;
         private final Function<Double, Double> func;
 
-        SingleFunctions(String name, Function<Double, Double> func) {
-            this.name = name;
+        SingleFunctions(Function<Double, Double> func) {
             this.func = func;
         }
 
@@ -51,18 +71,22 @@ public interface NamedFunctionType {
 
         @Override
         public String getName() {
-            return this.name;
+            return this.name();
         }
     }
 
+    @SuppressWarnings("unused")
     enum DoubleFunctions implements NamedFunctionType {
-        ;
+        ROOT((num, root) -> root == 0 ? 1 : (num < 0 ? -1 : 1) * Math.pow(Math.abs(num), 1 / root)),
+        MAX(Math::max),
+        MIN(Math::min),
+        HYPOT(Math::hypot),
+        POW(Math::pow),
+        IEEEREMAINDER(Math::IEEEremainder);
 
-        private final String name;
         private final BiFunction<Double, Double, Double> func;
 
-        DoubleFunctions(String name, BiFunction<Double, Double, Double> func) {
-            this.name = name;
+        DoubleFunctions(BiFunction<Double, Double, Double> func) {
             this.func = func;
         }
 
@@ -78,7 +102,7 @@ public interface NamedFunctionType {
 
         @Override
         public String getName() {
-            return this.name;
+            return this.name();
         }
     }
 }
