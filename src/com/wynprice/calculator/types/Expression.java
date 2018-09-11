@@ -2,17 +2,18 @@ package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
 import com.wynprice.calculator.InputReader;
+import com.wynprice.calculator.MathExecuteException;
 import com.wynprice.calculator.MathParseException;
 
 public class Expression implements CalculationType {
 
     private final CalculationType calculation;
 
-    public Expression(InputReader reader) {
+    public Expression(InputReader reader) throws MathParseException {
         this(reader, false);
     }
 
-    public Expression(InputReader reader, boolean isFunc) {
+    public Expression(InputReader reader, boolean isFunc) throws MathParseException {
         CalculationType left = null;
         CalculationType right = null;
 
@@ -46,7 +47,7 @@ public class Expression implements CalculationType {
                 if(type != null) {
                     mathType = type;
                 } else {
-                    //Throw error?
+                    throw new MathParseException(startPos, "I don't know how to process this...");
                 }
             }
 
@@ -63,6 +64,9 @@ public class Expression implements CalculationType {
             }
         }
         if(right == null && mathType == null) {
+            if(left == null) {
+                throw new MathParseException(startPos, "Empty Expression");
+            }
             this.calculation = left;
         } else if(left != null){
             this.calculation = new SimpleMath(mathType, left, right);
@@ -72,7 +76,7 @@ public class Expression implements CalculationType {
     }
 
     @Override
-    public double getValue() {
+    public double getValue() throws MathExecuteException {
         return this.calculation.getValue();
     }
 }

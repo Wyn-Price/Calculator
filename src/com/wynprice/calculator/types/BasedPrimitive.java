@@ -20,10 +20,10 @@ public class BasedPrimitive implements CalculationType {
     }
 
     private final String input;
-    private final double radix;
+    private final Expression radixExpression;
 
 
-    public BasedPrimitive(InputReader reader) {
+    public BasedPrimitive(InputReader reader) throws MathParseException {
         int startPos = reader.getPos();
         while (reader.hasMore()) {
             char c = reader.peakNextChar();
@@ -36,14 +36,17 @@ public class BasedPrimitive implements CalculationType {
         if(!reader.isNextChar('_')) {
             throw new MathParseException(startPos, "Unacceptable base primitive input");
         }
-        this.radix = new Expression(reader).getValue();
+        this.radixExpression = new Expression(reader);
     }
 
     @Override
-    public double getValue() {
+    public double getValue() throws MathExecuteException {
         //Actual Math. Converted from -> https://github.com/Wyn-Price/Fireworks/blob/master/src/main/java/com/wynprice/fireworks/common/util/calculator/ExtraMathUtils.java
-        if(this.radix == 0) {
-            throw new MathExecuteException("Unable to process base conversion with radix 0");
+
+        double radix = this.radixExpression.getValue();
+
+        if(radix == 0) {
+            throw new MathExecuteException("Unable to process base conversion with radixExpression 0");
         }
         String noDecimalInput;
         int decimal = this.input.indexOf('.');
@@ -57,13 +60,13 @@ public class BasedPrimitive implements CalculationType {
         for(int i = 0; i < noDecimalInput.length(); i++) {
             char c = noDecimalInput.charAt(i);
             int charIndex = CHARSET.indexOf(c);
-            if(charIndex >= this.radix) {
-                throw new MathExecuteException("Input character:" + c + " was larger than the radix: " + radix);
+            if(charIndex >= radix) {
+                throw new MathExecuteException("Input character:" + c + " was larger than the radixExpression: " + radix);
             }
             if(charIndex == -1) {
                 throw new MathExecuteException("Unexpected Character: " + c + ", at position: " + i);
             }
-            out += charIndex * Math.pow(this.radix, decimal - i - 1);
+            out += charIndex * Math.pow(radix, decimal - i - 1);
         }
         return out;
     }

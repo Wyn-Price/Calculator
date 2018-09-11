@@ -1,5 +1,5 @@
 package com.wynprice.calculator;
 
 public interface CalculationType {
-    double getValue();
+    double getValue() throws MathExecuteException;
 }

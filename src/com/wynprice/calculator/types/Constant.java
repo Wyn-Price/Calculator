@@ -8,7 +8,7 @@ public class Constant implements CalculationType {
 
     private final double constant;
 
-    public Constant(InputReader reader) {
+    public Constant(InputReader reader) throws MathParseException {
         int startPos = reader.getPos();
         while (reader.hasMore()) {
             char c = reader.peakNextChar();

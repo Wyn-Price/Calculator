@@ -1,6 +1,7 @@
 package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
+import com.wynprice.calculator.MathExecuteException;
 
 import java.util.function.BiFunction;
 
@@ -17,7 +18,7 @@ public class SimpleMath implements CalculationType {
     }
 
     @Override
-    public double getValue() {
+    public double getValue() throws MathExecuteException {
         return this.mathType.mathFunc.apply(this.left.getValue(), this.right.getValue());
     }
 

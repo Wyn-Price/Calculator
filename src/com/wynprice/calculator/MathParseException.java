@@ -1,6 +1,6 @@
 package com.wynprice.calculator;
 
-public class MathParseException extends RuntimeException {
+public class MathParseException extends Exception {
 
     private final int startPos;
 

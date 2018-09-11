@@ -13,7 +13,7 @@ public interface NamedFunctionType {
     double getValue(double[] adouble);
 
     //TODO: registry
-    static NamedFunctionType getType(int startPos, String name) {
+    static NamedFunctionType getType(int startPos, String name) throws MathParseException {
         for (SingleFunctions func : SingleFunctions.values()) {
             if(func.name().equalsIgnoreCase(name)) {
                 return func;
