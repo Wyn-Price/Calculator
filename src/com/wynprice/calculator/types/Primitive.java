@@ -1,13 +1,13 @@
 package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.StringReader;
+import com.wynprice.calculator.InputReader;
 
 public class Primitive implements CalculationType {
 
     private final double value;
 
-    protected Primitive(StringReader reader) {
+    protected Primitive(InputReader reader) {
         int startPos = reader.getPos();
         while (reader.hasMore()) {
             char c = reader.peakNextChar();

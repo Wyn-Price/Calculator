@@ -1,14 +1,24 @@
 package com.wynprice.calculator;
 
-public class StringReader {
+import java.util.HashMap;
+import java.util.Map;
+
+public class InputReader {
+
+    private final Map<String, Double> constantMap = new HashMap<>();
 
     private final String input;
 
     private int pos = -1;
     private char character;
 
-    public StringReader(String input) {
+    public InputReader(String input) {
         this.input = input;
+    }
+
+    public InputReader withConstant(String varName, double value) {
+        this.constantMap.put(varName, value);
+        return this;
     }
 
     public char getNextChar() {
@@ -47,10 +57,18 @@ public class StringReader {
     }
 
     public String getFrom(int fromPos) {
-        return this.input.substring(fromPos, this.pos + 1);
+        return this.input.substring(fromPos, Math.min(this.input.length(), this.pos + 1));
     }
 
     public char getCharacter() {
         return character;
+    }
+
+    public boolean hasConstant(String consName) {
+        return this.constantMap.containsKey(consName);
+    }
+
+    public double getConstant(String consName) {
+        return this.constantMap.get(consName);
     }
 }

@@ -25,7 +25,8 @@ public class SimpleMath implements CalculationType {
         TIMES("*", (d1, d2) -> d1 * d2),
         DIVIDE("/", (d1, d2) -> d1 / d2),
         PLUS("+", (d1, d2) -> d1 + d2),
-        MINUS("-", (d1, d2) -> d1 - d2);
+        MINUS("-", (d1, d2) -> d1 - d2),
+        MOD("%", (d1, d2) -> d1 % d2);
 
         private final String bit;
         private final BiFunction<Double, Double, Double> mathFunc;

@@ -1,14 +1,14 @@
 package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.StringReader;
-import com.wynprice.calculator.exceptions.MathParseException;
+import com.wynprice.calculator.InputReader;
+import com.wynprice.calculator.MathParseException;
 
 public class Expression implements CalculationType {
 
     private final CalculationType calculation;
 
-    public Expression(StringReader reader) {
+    public Expression(InputReader reader) {
         CalculationType left = null;
         CalculationType right = null;
 
@@ -21,23 +21,30 @@ public class Expression implements CalculationType {
             char c = reader.getNextChar();
             CalculationType exp = null;
 
-            if(reader.getCharacter() == '(') {
+            if(reader.getCharacter() == '(') { //Create a new expression
                 exp = new Expression(reader);
-            } else if(reader.getCharacter() == ')') {
+            } else if(reader.getCharacter() == ')') { //End the expression
                 break;
-            } else if((c >= '0' && c <= '9') || c == '.') {
+            } else if(reader.getCharacter() == '$') { //Use the constants
+                reader.getNextChar();//Get the characters after the '$', so move the pointer here
+                exp = new Constant(reader);
+            } else if((c >= '0' && c <= '9') || c == '.') { //Parse the number as a primitive
                 exp = new Primitive(reader);
-            } else {
+            } else if(c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') { //Try and run the expression as a function
+                exp = new MathFunction(reader);
+            } else { //Else type and parse it as a math symbol.
                 SimpleMath.MathType type = SimpleMath.MathType.getFromChar(c);
                 if(type != null) {
                     mathType = type;
+                } else {
+                    //Throw error?
                 }
             }
 
             if(exp != null) {
                 if(doneLeft) {
                     if(mathType == null) {
-                        throw new MathParseException("Tried to run an expression with no maths");
+                        mathType = SimpleMath.MathType.TIMES; //Set math type to times. This allows for stuff like 5(2 + 3).
                     }
                     right = exp;
                 } else {
@@ -51,7 +58,7 @@ public class Expression implements CalculationType {
         } else if(left != null){
             this.calculation = new SimpleMath(mathType, left, right);
         } else {
-            throw new MathParseException("Invalid Input in expression " + reader.getFrom(startPos));
+            throw new MathParseException(startPos, "Invalid Input in expression " + reader.getFrom(startPos));
         }
     }
 
