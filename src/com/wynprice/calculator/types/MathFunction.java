@@ -4,8 +4,6 @@ import com.wynprice.calculator.CalculationType;
 import com.wynprice.calculator.InputReader;
 import com.wynprice.calculator.MathParseException;
 
-import java.io.StringReader;
-
 public class MathFunction implements CalculationType {
 
     private final NamedFunctionType function;
@@ -29,12 +27,13 @@ public class MathFunction implements CalculationType {
         if (!ended) {
             throw new MathParseException(startPos, "Unbalanced brackets at \"" + funcEnd + "\"");
         }
+        reader.getNextChar(); //Skip the (
         this.function = NamedFunctionType.getType(startPos, funcEnd);
         int count = this.function.getParameterCount();
         this.types = new CalculationType[count];
 
         for (int i = 0; i < count; i++) {
-            this.types[i] = new Expression(reader);
+            this.types[i] = new Expression(reader, true);
             if (i + 1 != count && !reader.isNextChar(',')) {
                 throw new MathParseException(startPos, "Expected " + count + " inputs, found " + i);
             }

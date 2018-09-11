@@ -9,6 +9,10 @@ public class Expression implements CalculationType {
     private final CalculationType calculation;
 
     public Expression(InputReader reader) {
+        this(reader, false);
+    }
+
+    public Expression(InputReader reader, boolean isFunc) {
         CalculationType left = null;
         CalculationType right = null;
 
@@ -25,6 +29,11 @@ public class Expression implements CalculationType {
                 exp = new Expression(reader);
             } else if(reader.getCharacter() == ')') { //End the expression
                 break;
+            } else if(isFunc && reader.getCharacter() == ',') { //If we're in a function and found the end of parameter
+                break;
+            } else if(reader.getCharacter() == '_') {//Parse the input from an different base
+                reader.getNextChar();//Get the characters after the '"', so move the pointer here
+                exp = new BasedPrimitive(reader);
             } else if(reader.getCharacter() == '$') { //Use the constants
                 reader.getNextChar();//Get the characters after the '$', so move the pointer here
                 exp = new Constant(reader);
