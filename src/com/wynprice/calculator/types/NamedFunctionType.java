@@ -2,33 +2,35 @@ package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.MathParseException;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface NamedFunctionType {
     int getParameterCount();
 
-    String getName();
-
     double getValue(double[] adouble);
 
-    //TODO: registry
-    static NamedFunctionType getType(int startPos, String name) throws MathParseException {
-        for (SingleFunctions func : SingleFunctions.values()) {
-            if(func.name().equalsIgnoreCase(name)) {
-                return func;
-            }
+
+    Map<String, NamedFunctionType> functionMap = new HashMap<String, NamedFunctionType>(){{
+        for (SingleFunction func : SingleFunction.values()) {
+            this.put(func.name().toLowerCase(), func);
         }
-        for (DoubleFunctions func : DoubleFunctions.values()) {
-            if(func.name().equalsIgnoreCase(name)) {
-                return func;
-            }
+        for (DoubleFunction func : DoubleFunction.values()) {
+            this.put(func.name().toLowerCase(), func);
+        }
+    }};
+
+    static NamedFunctionType getType(int startPos, String name) throws MathParseException {
+        if(functionMap.containsKey(name)) {
+            return functionMap.get(name);
         }
         throw new MathParseException(startPos, "Unknown function " + name);
     }
 
     @SuppressWarnings("unused")
-    enum SingleFunctions implements NamedFunctionType {
+    enum SingleFunction implements NamedFunctionType {
         SQRT(Math::sqrt),
         CBRT(Math::cbrt),
         FLOOR(Math::floor),
@@ -55,7 +57,7 @@ public interface NamedFunctionType {
 
         private final Function<Double, Double> func;
 
-        SingleFunctions(Function<Double, Double> func) {
+        SingleFunction(Function<Double, Double> func) {
             this.func = func;
         }
 
@@ -68,15 +70,10 @@ public interface NamedFunctionType {
         public double getValue(double[] adouble) {
             return this.func.apply(adouble[0]);
         }
-
-        @Override
-        public String getName() {
-            return this.name();
-        }
     }
 
     @SuppressWarnings("unused")
-    enum DoubleFunctions implements NamedFunctionType {
+    enum DoubleFunction implements NamedFunctionType {
         ROOT((num, root) -> root == 0 ? 1 : (num < 0 ? -1 : 1) * Math.pow(Math.abs(num), 1 / root)),
         MAX(Math::max),
         MIN(Math::min),
@@ -86,7 +83,7 @@ public interface NamedFunctionType {
 
         private final BiFunction<Double, Double, Double> func;
 
-        DoubleFunctions(BiFunction<Double, Double, Double> func) {
+        DoubleFunction(BiFunction<Double, Double, Double> func) {
             this.func = func;
         }
 
@@ -98,11 +95,6 @@ public interface NamedFunctionType {
         @Override
         public double getValue(double[] adouble) {
             return this.func.apply(adouble[0], adouble[1]);
-        }
-
-        @Override
-        public String getName() {
-            return this.name();
         }
     }
 }
