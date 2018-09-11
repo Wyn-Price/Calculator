@@ -1,7 +1,6 @@
 package com.wynprice.calculator;
 
 import com.wynprice.calculator.types.Expression;
-import com.wynprice.calculator.types.StringReader;
 
 public class Main {
     public static void main(String[] args) {

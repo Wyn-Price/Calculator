@@ -1,6 +1,7 @@
 package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
+import com.wynprice.calculator.StringReader;
 
 public class Primitive implements CalculationType {
 

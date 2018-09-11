@@ -1,4 +1,4 @@
-package com.wynprice.calculator.types;
+package com.wynprice.calculator;
 
 public class StringReader {
 

@@ -1,9 +1,8 @@
 package com.wynprice.calculator.types;
 
 import com.wynprice.calculator.CalculationType;
+import com.wynprice.calculator.StringReader;
 import com.wynprice.calculator.exceptions.MathParseException;
-
-import java.util.List;
 
 public class Expression implements CalculationType {
 
