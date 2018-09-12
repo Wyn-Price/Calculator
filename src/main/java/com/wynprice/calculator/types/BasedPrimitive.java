@@ -1,9 +1,6 @@
 package com.wynprice.calculator.types;
 
-import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.InputReader;
-import com.wynprice.calculator.MathExecuteException;
-import com.wynprice.calculator.MathParseException;
+import com.wynprice.calculator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,7 @@ public class BasedPrimitive implements CalculationType {
 
 
     public BasedPrimitive(InputReader reader) throws MathParseException {
+        Main.logger.startSection("BasedPrimitive", reader);
         int startPos = reader.getPos();
         while (reader.hasMore()) {
             char c = reader.peakNextChar();
@@ -38,6 +36,7 @@ public class BasedPrimitive implements CalculationType {
             throw new MathParseException(startPos, "Unacceptable base primitive input");
         }
         this.radixExpression = new Expression(reader);
+        Main.logger.endSection(reader);
     }
 
     @Override

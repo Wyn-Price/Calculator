@@ -1,9 +1,6 @@
 package com.wynprice.calculator.types;
 
-import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.InputReader;
-import com.wynprice.calculator.MathExecuteException;
-import com.wynprice.calculator.MathParseException;
+import com.wynprice.calculator.*;
 
 import java.util.Map;
 
@@ -12,6 +9,7 @@ public class Constant implements CalculationType {
     private final String constantName;
 
     public Constant(InputReader reader) throws MathParseException {
+        Main.logger.startSection("Constant", reader);
         int startPos = reader.getPos();
         while (reader.hasMore()) {
             char c = reader.peakNextChar();
@@ -23,6 +21,7 @@ public class Constant implements CalculationType {
             reader.getNextChar();
         }
         this.constantName = reader.getFrom(startPos);
+        Main.logger.endSection(reader);
     }
 
     @Override

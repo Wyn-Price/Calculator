@@ -1,9 +1,6 @@
 package com.wynprice.calculator.types;
 
-import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.InputReader;
-import com.wynprice.calculator.MathExecuteException;
-import com.wynprice.calculator.MathParseException;
+import com.wynprice.calculator.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +16,7 @@ public class Expression implements CalculationType {
     }
 
     public Expression(InputReader reader, boolean isFunc) throws MathParseException {
+        Main.logger.startSection("Expression", reader);
 
         List<CalculationType> types = new ArrayList<>();
         List<SimpleMath.MathType> corrospondingTypes = new ArrayList<>();
@@ -96,6 +94,7 @@ public class Expression implements CalculationType {
         }
 
         this.calculation = previous;
+        Main.logger.endSection(reader);
     }
 
     @Override

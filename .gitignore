@@ -16,3 +16,6 @@ out
 # gradle
 build
 .gradle
+
+# Mist
+.log

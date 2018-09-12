@@ -9,13 +9,25 @@ import org.knowm.xchart.XYChart;
 import javax.swing.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
 
+    public static ExpressionLogger logger = new ExpressionLogger();
+
 
     public static void main(String[] args) {
+
+        try {
+            System.setOut(new PrintStream(new File("calculator-logs.log")));
+            System.setErr(new PrintStream(new File("calculator-errors.log")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         // Create Chart
         XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", " ", new double[]{0}, new double[]{0});
 
@@ -31,17 +43,17 @@ public class Main {
         panel.add(button);
 
 
-        JTextField minX = new JTextField();
+        JTextField minX = new JTextField("-10");
         panel.add(minX);
         JLabel minXLable = new JLabel("Min X: ");
         panel.add(minXLable);
 
-        JTextField maxX = new JTextField();
+        JTextField maxX = new JTextField("10");
         panel.add(maxX);
         JLabel maxXLable = new JLabel("Max X: ");
         panel.add(maxXLable);
 
-        JTextField step = new JTextField();
+        JTextField step = new JTextField("0.1");
         panel.add(step);
         JLabel stepLabel = new JLabel("Step: ");
         panel.add(stepLabel);
@@ -95,6 +107,12 @@ public class Main {
     }
 
     public static void runExpressionAndGraph(XYChart chart, String input, double minX, double maxX, double step) {
+
+        logger = new ExpressionLogger();
+
+        System.out.print("Started Calculation: '" + input + "'\n");
+
+
         InputReader reader = new InputReader(input);
 
         int size = (int) Math.floor((maxX - minX) / step);
@@ -123,12 +141,14 @@ public class Main {
 
         } catch (MathParseException e) {
             String out = reader.getFrom(e.getStartPos());
-            System.out.println("UNABLE TO COMPILE CALCULATION");
-            System.out.println("Reason: " + e.getMessage());
-            System.out.println(out + "<-----HERE");
+            System.err.println("UNABLE TO COMPILE CALCULATION");
+            System.err.println("Reason: " + e.getMessage());
+            System.err.println(out + "<-----HERE");
         }
 
         chart.getSeriesMap().clear();
         chart.addSeries("y = " + "y = " + input.replace("$x", "x"), xData, yData);
+
+        System.out.println("\n\n\n");
     }
 }

@@ -1,9 +1,6 @@
 package com.wynprice.calculator.types;
 
-import com.wynprice.calculator.CalculationType;
-import com.wynprice.calculator.InputReader;
-import com.wynprice.calculator.MathExecuteException;
-import com.wynprice.calculator.MathParseException;
+import com.wynprice.calculator.*;
 
 import java.util.Map;
 
@@ -13,6 +10,7 @@ public class MathFunction implements CalculationType {
     private final CalculationType[] types;
 
     public MathFunction(InputReader reader) throws MathParseException {
+        Main.logger.startSection("MathFunction", reader);
         int startPos = reader.getPos();
         boolean ended = false;
         while (reader.hasMore()) {
@@ -38,6 +36,7 @@ public class MathFunction implements CalculationType {
                 throw new MathParseException(startPos, i + 1 != count ? "Expected " + count + " inputs, found " + i : "Unexpected comma" );
             }
         }
+        Main.logger.endSection(reader);
     }
 
     @Override
