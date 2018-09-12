@@ -8,6 +8,7 @@ import com.wynprice.calculator.MathParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class Expression implements CalculationType {
 
@@ -30,7 +31,9 @@ public class Expression implements CalculationType {
             CalculationType exp = null;
             SimpleMath.MathType mathType = null;
 
-            if(reader.getCharacter() == '(') { //Create a new expression
+            if(reader.getCharacter() == ' ') {
+                continue;
+            } else if(reader.getCharacter() == '(') { //Create a new expression
                 exp = new Expression(reader);
             } else if(reader.getCharacter() == ')') { //End the expression
                 break;
@@ -96,7 +99,7 @@ public class Expression implements CalculationType {
     }
 
     @Override
-    public double getValue() throws MathExecuteException {
-        return this.calculation.getValue();
+    public double getValue(Map<String, Double> constantMap) throws MathExecuteException {
+        return this.calculation.getValue(constantMap);
     }
 }

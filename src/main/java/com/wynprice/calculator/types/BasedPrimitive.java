@@ -7,6 +7,7 @@ import com.wynprice.calculator.MathParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BasedPrimitive implements CalculationType {
 
@@ -40,10 +41,10 @@ public class BasedPrimitive implements CalculationType {
     }
 
     @Override
-    public double getValue() throws MathExecuteException {
+    public double getValue(Map<String, Double> constantMap) throws MathExecuteException {
         //Actual Math. Converted from -> https://github.com/Wyn-Price/Fireworks/blob/master/src/main/java/com/wynprice/fireworks/common/util/calculator/ExtraMathUtils.java
 
-        double radix = this.radixExpression.getValue();
+        double radix = this.radixExpression.getValue(constantMap);
 
         if(radix == 0) {
             throw new MathExecuteException("Unable to process base conversion with radixExpression 0");

@@ -3,6 +3,7 @@ package com.wynprice.calculator.types;
 import com.wynprice.calculator.CalculationType;
 import com.wynprice.calculator.MathExecuteException;
 
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class SimpleMath implements CalculationType {
@@ -18,8 +19,8 @@ public class SimpleMath implements CalculationType {
     }
 
     @Override
-    public double getValue() throws MathExecuteException {
-        return this.mathType.mathFunc.apply(this.left.getValue(), this.right.getValue());
+    public double getValue(Map<String, Double> constantMap) throws MathExecuteException {
+        return this.mathType.mathFunc.apply(this.left.getValue(constantMap), this.right.getValue(constantMap));
     }
 
     public enum MathType {

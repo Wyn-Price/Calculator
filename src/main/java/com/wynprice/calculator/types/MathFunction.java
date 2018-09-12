@@ -5,6 +5,8 @@ import com.wynprice.calculator.InputReader;
 import com.wynprice.calculator.MathExecuteException;
 import com.wynprice.calculator.MathParseException;
 
+import java.util.Map;
+
 public class MathFunction implements CalculationType {
 
     private final NamedFunctionType function;
@@ -39,10 +41,10 @@ public class MathFunction implements CalculationType {
     }
 
     @Override
-    public double getValue() throws MathExecuteException {
+    public double getValue(Map<String, Double> constantMap) throws MathExecuteException {
         double[] adouble = new double[this.types.length];
         for (int i = 0; i < this.types.length; i++) {
-            adouble[i] = this.types[i].getValue();
+            adouble[i] = this.types[i].getValue(constantMap);
         }
         return this.function.getValue(adouble);
     }

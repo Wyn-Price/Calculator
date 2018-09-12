@@ -1,11 +1,6 @@
 package com.wynprice.calculator;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class InputReader {
-
-    private final Map<String, Double> constantMap = new HashMap<>();
 
     private final String input;
 
@@ -14,11 +9,6 @@ public class InputReader {
 
     public InputReader(String input) {
         this.input = input;
-    }
-
-    public InputReader withConstant(String varName, double value) {
-        this.constantMap.put(varName, value);
-        return this;
     }
 
     public char getNextChar() {
@@ -62,13 +52,5 @@ public class InputReader {
 
     public char getCharacter() {
         return character;
-    }
-
-    public boolean hasConstant(String consName) {
-        return this.constantMap.containsKey(consName);
-    }
-
-    public double getConstant(String consName) {
-        return this.constantMap.get(consName);
     }
 }

@@ -3,6 +3,8 @@ package com.wynprice.calculator.types;
 import com.wynprice.calculator.CalculationType;
 import com.wynprice.calculator.InputReader;
 
+import java.util.Map;
+
 public class Primitive implements CalculationType {
 
     private final double value;
@@ -20,7 +22,7 @@ public class Primitive implements CalculationType {
     }
 
     @Override
-    public double getValue() {
+    public double getValue(Map<String, Double> constantMap) {
         return this.value;
     }
 }
