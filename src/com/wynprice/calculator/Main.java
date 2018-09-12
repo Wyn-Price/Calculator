@@ -4,7 +4,7 @@ import com.wynprice.calculator.types.Expression;
 
 public class Main {
     public static void main(String[] args) {
-        InputReader reader = new InputReader("2pow(2, 3)");
+        InputReader reader = new InputReader("4*3+2");
         try {
             Expression expression = new Expression(reader);
             try {

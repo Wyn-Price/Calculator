@@ -23,18 +23,24 @@ public class SimpleMath implements CalculationType {
     }
 
     public enum MathType {
-        TIMES("*", (d1, d2) -> d1 * d2),
-        DIVIDE("/", (d1, d2) -> d1 / d2),
-        PLUS("+", (d1, d2) -> d1 + d2),
-        MINUS("-", (d1, d2) -> d1 - d2),
-        MOD("%", (d1, d2) -> d1 % d2);
+        MOD(true, "%", (d1, d2) -> d1 % d2),
+        TIMES(true, "*", (d1, d2) -> d1 * d2),
+        DIVIDE(true, "/", (d1, d2) -> d1 / d2),
+        PLUS(false, "+", (d1, d2) -> d1 + d2),
+        MINUS(false, "-", (d1, d2) -> d1 - d2);
 
+        private final boolean calculateBefore;
         private final String bit;
         private final BiFunction<Double, Double, Double> mathFunc;
 
-        MathType(String bit, BiFunction<Double, Double, Double> mathFunc) {
+        MathType(boolean calculateBefore, String bit, BiFunction<Double, Double, Double> mathFunc) {
+            this.calculateBefore = calculateBefore;
             this.bit = bit;
             this.mathFunc = mathFunc;
+        }
+
+        public boolean shouldCalculateBefore() {
+            return this.calculateBefore;
         }
 
         public static MathType getFromChar(char c) {

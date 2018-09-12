@@ -5,6 +5,10 @@ import com.wynprice.calculator.InputReader;
 import com.wynprice.calculator.MathExecuteException;
 import com.wynprice.calculator.MathParseException;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class Expression implements CalculationType {
 
     private final CalculationType calculation;
@@ -14,17 +18,17 @@ public class Expression implements CalculationType {
     }
 
     public Expression(InputReader reader, boolean isFunc) throws MathParseException {
-        CalculationType left = null;
-        CalculationType right = null;
 
-        SimpleMath.MathType mathType = null;
-
+        List<CalculationType> types = new ArrayList<>();
+        List<SimpleMath.MathType> corrospondingTypes = new ArrayList<>();
         int startPos = reader.getPos();
 
-        boolean doneLeft = false;
+        boolean prevHadExp = false;
+
         while(reader.hasMore()) {
             char c = reader.getNextChar();
             CalculationType exp = null;
+            SimpleMath.MathType mathType = null;
 
             if(reader.getCharacter() == '(') { //Create a new expression
                 exp = new Expression(reader);
@@ -51,28 +55,44 @@ public class Expression implements CalculationType {
                 }
             }
 
+            if(prevHadExp) {
+                corrospondingTypes.add(mathType == null ? SimpleMath.MathType.TIMES : mathType);
+            }
+
             if(exp != null) {
-                if(doneLeft) {
-                    if(mathType == null) {
-                        mathType = SimpleMath.MathType.TIMES; //Set math type to times. This allows for stuff like 5(2 + 3).
-                    }
-                    right = exp;
-                } else {
-                    left = exp;
-                    doneLeft = true;
-                }
+                types.add(exp);
+            }
+
+            prevHadExp = exp != null;
+        }
+
+        List<CalculationType> simpleTypes = new ArrayList<>();
+        List<SimpleMath.MathType> simpleCorrospondingTypes = new ArrayList<>();
+
+        simpleTypes.add(types.get(0));
+
+        for (int i = 0; i < corrospondingTypes.size(); i++) {
+            SimpleMath.MathType type = corrospondingTypes.get(i);
+            if(type.shouldCalculateBefore()) {
+                simpleTypes.add(new SimpleMath(type, simpleTypes.get(simpleTypes.size() - 1), types.get(i + 1)));
+                simpleTypes.remove(simpleTypes.size() - 2);
+            } else {
+                simpleTypes.add(types.get(i + 1));
+                simpleCorrospondingTypes.add(type);
             }
         }
-        if(right == null && mathType == null) {
-            if(left == null) {
-                throw new MathParseException(startPos, "Empty Expression");
+
+        CalculationType previous = null;
+        for (int i = 0; i < simpleTypes.size(); i++) {
+            CalculationType calculation = simpleTypes.get(i);
+            if(i != 0) {
+                previous = new SimpleMath(simpleCorrospondingTypes.get(i - 1), previous, calculation);
+            } else {
+                previous = calculation;
             }
-            this.calculation = left;
-        } else if(left != null){
-            this.calculation = new SimpleMath(mathType, left, right);
-        } else {
-            throw new MathParseException(startPos, "Invalid Input in expression " + reader.getFrom(startPos));
         }
+
+        this.calculation = previous;
     }
 
     @Override
