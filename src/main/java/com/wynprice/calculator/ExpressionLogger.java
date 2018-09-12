@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionLogger {
-    public static final String SEPERATOR = "-----";
+    public static final String SEPERATOR = "----|";
 
     private int level;
 
@@ -17,7 +17,7 @@ public class ExpressionLogger {
         for (int i = 0; i < this.level; i++) {
             System.out.print(SEPERATOR );
         }
-        System.out.print("|+      ");
+        System.out.print("+  ");
         System.out.println("Started Calculating '" + section + "' with position '" + reader.getPos() + "'");
         this.level++;
     }
@@ -29,7 +29,7 @@ public class ExpressionLogger {
         for (int i = 0; i < this.level; i++) {
             System.out.print(SEPERATOR);
         }
-        System.out.print("|-      ");
+        System.out.print("-  ");
         System.out.println("Calculated '" + removed + "'. Used characters: '" + reader.getFrom(posRemoved) + "'");
     }
 }

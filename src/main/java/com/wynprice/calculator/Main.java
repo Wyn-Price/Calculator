@@ -110,7 +110,7 @@ public class Main {
 
         logger = new ExpressionLogger();
 
-        System.out.print("Started Calculation: '" + input + "'\n");
+        System.out.print("Started Calculation: '" + input + "' \n");
 
 
         InputReader reader = new InputReader(input);
@@ -149,6 +149,6 @@ public class Main {
         chart.getSeriesMap().clear();
         chart.addSeries("y = " + input.replace("$x", "x"), xData, yData);
 
-        System.out.println("\n\n\n");
+        System.out.println("\n");
     }
 }
