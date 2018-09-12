@@ -23,6 +23,7 @@ public class Expression implements CalculationType {
         int startPos = reader.getPos();
 
         boolean prevHadExp = false;
+        boolean shouldMinus = false;
 
         while(reader.hasMore()) {
             char c = reader.getNextChar();
@@ -58,9 +59,15 @@ public class Expression implements CalculationType {
 
             if(prevHadExp) {
                 corrospondingTypes.add(mathType == null ? SimpleMath.MathType.TIMES : mathType);
+            } else if(mathType == SimpleMath.MathType.MINUS) {
+                shouldMinus = true;
             }
 
             if(exp != null) {
+                if(shouldMinus) {
+                    types.add(new MinusWrapper(exp, reader));
+                    shouldMinus = false;
+                }
                 types.add(exp);
             }
 
