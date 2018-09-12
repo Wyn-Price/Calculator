@@ -147,7 +147,7 @@ public class Main {
         }
 
         chart.getSeriesMap().clear();
-        chart.addSeries("y = " + "y = " + input.replace("$x", "x"), xData, yData);
+        chart.addSeries("y = " + input.replace("$x", "x"), xData, yData);
 
         System.out.println("\n\n\n");
     }

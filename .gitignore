@@ -17,5 +17,5 @@ out
 build
 .gradle
 
-# Mist
-.log
+# Misk
+*.log
