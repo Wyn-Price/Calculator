@@ -25,6 +25,7 @@ public class SimpleMath implements CalculationType {
 
     public enum MathType {
         MOD(true, "%", (d1, d2) -> d1 % d2),
+        POWER(true, "^", Math::pow),
         TIMES(true, "*", (d1, d2) -> d1 * d2),
         DIVIDE(true, "/", (d1, d2) -> d1 / d2),
         PLUS(false, "+", (d1, d2) -> d1 + d2),
