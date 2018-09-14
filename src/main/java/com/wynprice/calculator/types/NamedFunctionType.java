@@ -79,7 +79,8 @@ public interface NamedFunctionType {
         MIN(Math::min),
         HYPOT(Math::hypot),
         POW(Math::pow),
-        IEEEREMAINDER(Math::IEEEremainder);
+        IEEEREMAINDER(Math::IEEEremainder),
+        ATAN2(Math::atan2);
 
         private final BiFunction<Double, Double, Double> func;
 
